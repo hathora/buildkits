@@ -28,7 +28,7 @@ namespace Hathora
             await webSocket.SendAsync(bytesToSend, WebSocketMessageType.Binary, true, CancellationToken.None);
         }
 
-        public async Task<byte[]> Read()
+        public async Task<byte[]> ReadMessage()
         {
             List<byte> result = new List<byte>();
             ArraySegment<byte> bytesReceived = new ArraySegment<byte>(new byte[1024]);
@@ -42,7 +42,7 @@ namespace Hathora
             return result.ToArray();
         }
 
-        public async Task Write(byte[] data)
+        public async Task WriteMessage(byte[] data)
         {
             await webSocket.SendAsync(data, WebSocketMessageType.Binary, true, CancellationToken.None);
         }

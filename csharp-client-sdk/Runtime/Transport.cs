@@ -7,9 +7,9 @@ namespace Hathora
 
         public Task Connect(string stateId, string token);
 
-        public Task Write(byte[] data);
+        public Task WriteMessage(byte[] data);
 
-        public Task<byte[]> Read();
+        public Task<byte[]> ReadMessage();
 
         public bool IsReady();
 
