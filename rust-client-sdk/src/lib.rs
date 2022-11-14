@@ -73,7 +73,7 @@ impl HathoraClient {
         token: &str,
         state_id: &str,
         transport_type: HathoraTransportType,
-    ) -> Result<Box<dyn HathoraTransport>> {
+    ) -> Result<Box<dyn HathoraTransport + Send>> {
         match transport_type {
             HathoraTransportType::WebSocket => {
                 let mut transport = WebsocketTransport::new(
