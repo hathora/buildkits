@@ -76,12 +76,6 @@ impl HathoraClient {
         transport.connect(state_id, token)?;
         Ok(Box::new(transport))
     }
-    pub fn get_user_from_token(token: &str) -> Result<String> {
-        let segments: Vec<&str> = token.split('.').collect();
-        let bytes = base64::decode_config(segments[1], base64::URL_SAFE_NO_PAD)?;
-        let token: Token = serde_json::from_slice(&bytes)?;
-        Ok(token.id)
-    }
 
     pub fn get_user_from_token(token: &str) -> Result<String> {
         let segments: Vec<&str> = token.split('.').collect();
