@@ -71,10 +71,16 @@ impl HathoraClient {
         state_id: &str,
         transport_type: HathoraTransportType,
     ) -> Result<Box<dyn HathoraTransport>> {
-        let mut transport =
-            WebsocketTransport::new(self.app_id.clone(), Some(self.coordinator_host.clone()));
-        transport.connect(state_id, token)?;
-        Ok(Box::new(transport))
+        match transport_type {
+            HathoraTransportType::WebSocket => {
+                let mut transport = WebsocketTransport::new(
+                    self.app_id.clone(),
+                    Some(self.coordinator_host.clone()),
+                );
+                transport.connect(state_id, token)?;
+                Ok(Box::new(transport))
+            }
+        }
     }
 
     pub fn get_user_from_token(token: &str) -> Result<String> {
