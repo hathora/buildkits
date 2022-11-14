@@ -15,19 +15,16 @@ let token = client
 let roomId = client
     .create(&token, vec![])
     .expect("Creating a room should succeed");
-let mut connection = client
-    .connect(&token, &roomId)
+let mut transport = client
+    .connect(&token, &roomId, HathoraTransportType::WebSocket)
     .expect("Creating a websocket should succeed.");
 
-match connection
-    .read_message()
-    .expect("Reading from websocket should succeed")
-{
-    Message::Binary(b) => println!("Got message: {:?}", b),
-    _ => {}
-}
-connection
-    .write_message(Message::Binary(b"{ message: \"Hello world\" }".to_vec()))
+let message = transport
+    .read()
+    .expect("Reading from websocket should succeed");
+println!("Got message: {:?}", message);
+transport
+    .write(b"{ message: \"Hello world\" }".to_vec())
     .expect("Writing to socket should suceed");
 ```
 
