@@ -6,6 +6,8 @@ use reqwest::blocking::Client;
 use reqwest::header::{AUTHORIZATION, CONTENT_TYPE};
 
 use serde::{Deserialize, Serialize};
+use tungstenite::protocol::frame::coding::CloseCode;
+use tungstenite::protocol::CloseFrame;
 use tungstenite::{connect, stream::MaybeTlsStream, Message, WebSocket};
 
 use anyhow::{anyhow, bail, Result};
@@ -20,7 +22,8 @@ impl HathoraClient {
     pub fn new(app_id: String, coordinator_host: Option<String>) -> Self {
         HathoraClient {
             app_id,
-            coordinator_host: coordinator_host.unwrap_or("coordinator.hathora.dev".to_string()),
+            coordinator_host: coordinator_host
+                .unwrap_or_else(|| "coordinator.hathora.dev".to_string()),
             client: Client::new(),
         }
     }
@@ -113,11 +116,11 @@ struct WebsocketTransport {
 
 impl WebsocketTransport {
     fn new(app_id: String, coordinator_host: Option<String>) -> WebsocketTransport {
-        let coordinator_host = coordinator_host.unwrap_or("coordinator.hathora.dev".to_string());
+        let coordinator_host = coordinator_host.unwrap_or_else(|| "coordinator.hathora.dev".to_string());
         let websocket_url = format!("wss://{}/connect/{}", coordinator_host, app_id);
         let (web_socket, _response) =
             connect(Url::parse(&websocket_url).unwrap()).expect("Can't connect to websocket");
-        return WebsocketTransport { web_socket };
+        WebsocketTransport { web_socket }
     }
 }
 
@@ -169,7 +172,7 @@ impl HathoraTransport for WebsocketTransport {
 
         self.web_socket
             .close(close_code)
-            .map_err(|e| anyhow!("Failed to close websocket"))
+            .map_err(|_| anyhow!("Failed to close websocket"))
     }
 }
 
