@@ -60,9 +60,14 @@ namespace Hathora
 
         public async Task<Transport> Connect(string token, string stateId, TransportType transportType)
         {
-            WebsocketTransport result = new WebsocketTransport(appId, coordinatorHost);
-            await result.Connect(stateId, token);
-            return result;
+            switch (transportType)
+            {
+                case TransportType.WebSocket:
+                default:
+                    WebsocketTransport result = new WebsocketTransport(appId, coordinatorHost);
+                    await result.Connect(stateId, token);
+                    return result;
+            }
         }
 
         public enum TransportType
