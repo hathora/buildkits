@@ -23,14 +23,14 @@ string appId = "...";
 Hathora.Client client = new Hathora.Client(appId);
 string token = await client.LoginAnonymous();
 string roomId = await client.Create(token, new byte[] { });
-ClientWebSocket webSocket = await client.Connect(token, roomId);
-if (webSocket.State == WebSocketState.Open)
-{
-    ArraySegment<byte> bytesReceived = new ArraySegment<byte>(new byte[1024]);
-    WebSocketReceiveResult readResult = await webSocket.ReceiveAsync(bytesReceived, CancellationToken.None);
-    await webSocket.SendAsync(Encoding.UTF8.GetBytes("{ message: \"Hello world\" }"), WebSocketMessageType.Binary, true, CancellationToken.None);
-}
+Hathora.Transport connection = await client.Connect(token, roomId, Hathora.Client.TransportType.WebSocket);
 
+if (connection.IsReady())
+{
+    byte[] readResult = await connection.ReadMessage();
+    Console.WriteLine(Encoding.UTF8.GetString(readResult));
+    await connection.WriteMessage(Encoding.UTF8.GetBytes("{ message: \"Hello world\" }"));
+}
 ```
 
 ## Publishing Instructions
