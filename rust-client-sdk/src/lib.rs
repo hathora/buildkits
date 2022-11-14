@@ -101,9 +101,9 @@ pub enum HathoraTransportType {
 pub trait HathoraTransport {
     fn connect(&mut self, state_id: &str, token: &str) -> Result<()>;
 
-    fn write(&mut self, data: Vec<u8>) -> Result<()>;
+    fn write_message(&mut self, data: Vec<u8>) -> Result<()>;
 
-    fn read(&mut self) -> Result<Vec<u8>>;
+    fn read_message(&mut self) -> Result<Vec<u8>>;
 
     fn is_ready(&self) -> bool;
 
@@ -146,12 +146,12 @@ impl HathoraTransport for WebsocketTransport {
         Ok(())
     }
 
-    fn write(&mut self, data: Vec<u8>) -> Result<()> {
+    fn write_message(&mut self, data: Vec<u8>) -> Result<()> {
         self.web_socket.write_message(Message::Binary(data))?;
         Ok(())
     }
 
-    fn read(&mut self) -> Result<Vec<u8>> {
+    fn read_message(&mut self) -> Result<Vec<u8>> {
         let message = self.web_socket.read_message()?;
 
         match message {

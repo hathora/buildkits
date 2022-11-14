@@ -20,11 +20,11 @@ let mut transport = client
     .expect("Creating a websocket should succeed.");
 
 let message = transport
-    .read()
+    .read_message()
     .expect("Reading from websocket should succeed");
 println!("Got message: {:?}", message);
 transport
-    .write(b"{ message: \"Hello world\" }".to_vec())
+    .write_message(b"{ message: \"Hello world\" }".to_vec())
     .expect("Writing to socket should suceed");
 ```
 
