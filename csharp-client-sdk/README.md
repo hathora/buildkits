@@ -39,8 +39,8 @@ if (connection.IsReady())
 
 Update `package.json` version to $VERSION; commit this change.
 ```bash
-git tag $VERSION
-git push origin $VERSION
+git tag openupm/$VERSION
+git push origin openupm/$VERSION
 ```
 Then openUPM will trigger a build pipeline; see https://openupm.com/packages/com.hathora.client/?subPage=pipelines
 
