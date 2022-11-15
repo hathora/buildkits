@@ -13,7 +13,7 @@ openupm add com.hathora.client
 
 ### Nuget
 ```bash
-dotnet add package Hathora.ClientSdk --version 2.0.0
+dotnet add package Hathora.ClientSdk
 ```
 
 ## Usage 
