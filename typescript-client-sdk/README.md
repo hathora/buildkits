@@ -1,5 +1,7 @@
 # Hathora Typescript Client SDK
 
+<a href="https://www.npmjs.com/package/@hathora/client-sdk"><img src="https://badge.fury.io/js/@hathora%2Fclient-sdk.svg" alt="npm version"></a>
+
 ## Usage
 
 ```ts
