@@ -40,13 +40,17 @@ export class HathoraClient {
     return res.data.token;
   }
 
+  public generateSiweNonce(): Promise<{ nonce: string, nonceToken: string }> {
+    return axios.get(`http://localhost:3001/nonce`).then(res => res.data);
+  }
+
   public async loginSiwe(message: string, signature: string, nonceToken: string): Promise<string> {
     //create header X-Nonce-Token
     const header = {
       "X-Nonce-Token": nonceToken
     }
     const res = await axios.post(
-      `http://localhost:3000/verify`,
+      `http://localhost:3001/verify`,
       {
         message,
         signature
