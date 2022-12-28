@@ -40,10 +40,11 @@ export class HathoraClient {
     return res.data.token;
   }
 
-  public async loginSiwe(message: string, signature: string): Promise<string> {
+  public async loginSiwe(message: string, signature: string, nonceToken: string): Promise<string> {
     const res = await axios.post(`http://localhost:3000/verify`, {
       message,
       signature,
+      nonceToken
     });
     return res.data.token;
   }
