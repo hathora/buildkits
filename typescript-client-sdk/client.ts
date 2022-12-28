@@ -15,7 +15,7 @@ export class HathoraClient {
   public constructor(
     private appId: string,
     private coordinatorHost: string = "coordinator.hathora.dev"
-  ) {}
+  ) { }
 
   public async loginAnonymous(): Promise<string> {
     const res = await axios.post(
@@ -41,11 +41,18 @@ export class HathoraClient {
   }
 
   public async loginSiwe(message: string, signature: string, nonceToken: string): Promise<string> {
-    const res = await axios.post(`http://localhost:3000/verify`, {
-      message,
-      signature,
-      nonceToken
-    });
+    //create header X-Nonce-Token
+    const header = {
+      "X-Nonce-Token": nonceToken
+    }
+    const res = await axios.post(
+      `http://localhost:3000/verify`,
+      {
+        message,
+        signature
+      },
+      { headers: header }
+    );
     return res.data.token;
   }
 
