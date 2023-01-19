@@ -1,6 +1,4 @@
-import net from "net";
 import WebSocket from "isomorphic-ws";
-import { Reader, Writer } from "bin-serde";
 
 export enum TransportType {
   WebSocket,
@@ -22,11 +20,9 @@ export interface HathoraTransport {
 }
 
 export class WebSocketHathoraTransport implements HathoraTransport {
-  private socket: WebSocket;
+  private socket!: WebSocket;
 
-  constructor(appId: string, coordinatorHost: string) {
-    this.socket = new WebSocket(`wss://${coordinatorHost}/connect/${appId}`);
-  }
+  constructor(private serverUrl: string) {}
 
   public connect(
     stateId: string,
@@ -34,26 +30,21 @@ export class WebSocketHathoraTransport implements HathoraTransport {
     onData: (data: ArrayBuffer) => void,
     onClose: (e: { code: number; reason: string }) => void
   ): Promise<void> {
-    let connected = false;
+    this.socket = new WebSocket(`ws://${this.serverUrl}/${stateId}?token=${token}`);
+    this.socket.binaryType = "arraybuffer";
     return new Promise((resolve, reject) => {
-      this.socket.binaryType = "arraybuffer";
       this.socket.onclose = (e) => {
         reject(e.reason);
         onClose(e);
       };
       this.socket.onopen = () => {
-        this.socket.send(new TextEncoder().encode(JSON.stringify({ stateId, token })));
+        resolve();
       };
       this.socket.onmessage = ({ data }) => {
         if (!(data instanceof ArrayBuffer)) {
           throw new Error("Unexpected data type: " + typeof data);
         }
-        if (!connected) {
-          connected = true;
-          resolve();
-        } else {
-          onData(data);
-        }
+        onData(data);
       };
     });
   }
@@ -75,82 +66,5 @@ export class WebSocketHathoraTransport implements HathoraTransport {
 
   public pong() {
     this.socket.ping();
-  }
-}
-
-export class TCPHathoraTransport implements HathoraTransport {
-  private socket: net.Socket;
-
-  constructor(private appId: string, private coordinatorHost: string) {
-    this.socket = new net.Socket();
-  }
-
-  public connect(
-    stateId: string,
-    token: string,
-    onData: (data: ArrayBuffer) => void,
-    onClose: (e: { code: number; reason: string }) => void
-  ): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.socket.connect(7148, this.coordinatorHost);
-      this.socket.on("connect", () =>
-        this.socket.write(
-          new Writer()
-            .writeString(token)
-            .writeString(this.appId)
-            .writeUInt64([...stateId].reduce((r, v) => r * 36n + BigInt(parseInt(v, 36)), 0n))
-            .toBuffer()
-        )
-      );
-      this.socket.once("data", (data) => {
-        const reader = new Reader(new Uint8Array(data as ArrayBuffer));
-        const type = reader.readUInt8();
-        if (type === 0) {
-          this.readTCPData(onData);
-          this.socket.on("close", onClose);
-          onData(data as Buffer);
-          resolve();
-        } else {
-          reject("Unknown message type: " + type);
-        }
-      });
-    });
-  }
-
-  public write(data: Uint8Array) {
-    this.socket.write(
-      new Writer()
-        .writeUInt32(data.length + 1)
-        .writeUInt8(0)
-        .writeBuffer(data)
-        .toBuffer()
-    );
-  }
-
-  public disconnect(code?: number | undefined): void {
-    this.socket.destroy();
-  }
-
-  public isReady(): boolean {
-    return this.socket.readyState === "open";
-  }
-
-  public pong(): void {
-    this.socket.write(new Writer().writeUInt32(1).writeUInt8(1).toBuffer());
-  }
-
-  private readTCPData(onData: (data: Buffer) => void) {
-    let buf = Buffer.alloc(0);
-    this.socket.on("data", (data) => {
-      buf = Buffer.concat([buf, data]);
-      while (buf.length >= 4) {
-        const bufLen = buf.readUInt32BE();
-        if (buf.length < 4 + bufLen) {
-          return;
-        }
-        onData(buf.subarray(4, 4 + bufLen));
-        buf = buf.subarray(4 + bufLen);
-      }
-    });
   }
 }

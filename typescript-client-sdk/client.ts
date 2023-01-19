@@ -1,13 +1,17 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
-import { HathoraTransport, TCPHathoraTransport, TransportType, WebSocketHathoraTransport } from "./transport.js";
+import { HathoraTransport, TransportType, WebSocketHathoraTransport } from "./transport.js";
 
 export class HathoraClient {
   public static getUserFromToken(token: string): object & { id: string } {
     return jwtDecode(token);
   }
 
-  public constructor(private appId: string, private coordinatorHost: string = "coordinator.hathora.dev") {}
+  public constructor(
+    private serverUrl: string,
+    private appId: string,
+    private coordinatorHost: string = "coordinator.hathora.dev"
+  ) {}
 
   public async loginAnonymous(): Promise<string> {
     const res = await axios.post(`https://${this.coordinatorHost}/${this.appId}/login/anonymous`);
@@ -45,9 +49,7 @@ export class HathoraClient {
 
   private getConnectionForTransportType(transportType: TransportType): HathoraTransport {
     if (transportType === TransportType.WebSocket) {
-      return new WebSocketHathoraTransport(this.appId, this.coordinatorHost);
-    } else if (transportType === TransportType.TCP) {
-      return new TCPHathoraTransport(this.appId, this.coordinatorHost);
+      return new WebSocketHathoraTransport(this.serverUrl);
     }
     throw new Error("Unsupported transport type: " + transportType);
   }

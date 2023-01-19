@@ -27,10 +27,8 @@
   ],
   "dependencies": {
     "axios": "^0.27.2",
-    "bin-serde": "^1.1.1",
     "isomorphic-ws": "^5.0.0",
-    "jwt-decode": "^3.1.2",
-    "net": "^1.0.2"
+    "jwt-decode": "^3.1.2"
   },
   "devDependencies": {
     "@types/node": "^18.0.3",

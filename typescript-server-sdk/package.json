@@ -26,12 +26,10 @@
     "networking"
   ],
   "dependencies": {
-    "bin-serde": "^1.2.0",
-    "uuid": "^8.3.2"
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.19.0"
   },
   "devDependencies": {
     "@types/node": "^18.0.3",
-    "@types/uuid": "^8.3.4",
     "typescript": "^4.7.4"
   }
 }
