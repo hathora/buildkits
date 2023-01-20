@@ -7,11 +7,7 @@ export class HathoraClient {
     return jwtDecode(token);
   }
 
-  public constructor(
-    private serverUrl: string,
-    private appId: string,
-    private coordinatorHost: string = "coordinator.hathora.dev"
-  ) {}
+  public constructor(private appId: string, private coordinatorHost: string = "coordinator.hathora.dev") {}
 
   public async loginAnonymous(): Promise<string> {
     const res = await axios.post(`https://${this.coordinatorHost}/${this.appId}/login/anonymous`);
@@ -36,20 +32,21 @@ export class HathoraClient {
   }
 
   public async connect(
+    serverUrl: string,
     token: string,
-    stateId: string,
+    roomId: string,
     onMessage: (data: ArrayBuffer) => void,
     onClose: (e: { code: number; reason: string }) => void,
     transportType: TransportType = TransportType.WebSocket
   ): Promise<HathoraTransport> {
-    const connection = this.getConnectionForTransportType(transportType);
-    await connection.connect(stateId, token, onMessage, onClose);
+    const connection = this.getConnectionForTransportType(serverUrl, transportType);
+    await connection.connect(roomId, token, onMessage, onClose);
     return connection;
   }
 
-  private getConnectionForTransportType(transportType: TransportType): HathoraTransport {
+  private getConnectionForTransportType(serverUrl: string, transportType: TransportType): HathoraTransport {
     if (transportType === TransportType.WebSocket) {
-      return new WebSocketHathoraTransport(this.serverUrl);
+      return new WebSocketHathoraTransport(serverUrl);
     }
     throw new Error("Unsupported transport type: " + transportType);
   }
