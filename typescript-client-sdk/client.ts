@@ -7,34 +7,39 @@ export class HathoraClient {
     return jwtDecode(token);
   }
 
-  public constructor(private appId: string, private coordinatorHost: string = "coordinator.hathora.dev") {}
+  public constructor(private appId: string) {}
 
   public async loginAnonymous(): Promise<string> {
-    const res = await axios.post(`https://${this.coordinatorHost}/${this.appId}/login/anonymous`);
+    const res = await axios.post(`https://hathora-api.fly.dev/v2/auth/${this.appId}/login/anonymous`);
     return res.data.token;
   }
 
   public async loginNickname(nickname: string): Promise<string> {
-    const res = await axios.post(`https://${this.coordinatorHost}/${this.appId}/login/nickname`, { nickname });
+    const res = await axios.post(`https://hathora-api.fly.dev/v2/auth/${this.appId}/login/nickname`, { nickname });
     return res.data.token;
   }
 
   public async loginGoogle(idToken: string): Promise<string> {
-    const res = await axios.post(`https://${this.coordinatorHost}/${this.appId}/login/google`, { idToken });
+    const res = await axios.post(`https://hathora-api.fly.dev/v2/auth/${this.appId}/login/google`, { idToken });
     return res.data.token;
   }
 
-  public async create(token: string, data: ArrayBuffer): Promise<string> {
-    const res = await axios.post(`https://${this.coordinatorHost}/${this.appId}/create`, data, {
-      headers: { Authorization: token, "Content-Type": "application/octet-stream" },
+  public async create(token: string): Promise<string> {
+    const res = await axios.post(`https://hathora-api.fly.dev/v2/lobby/${this.appId}/create/unlisted`, {}, {
+      headers: { Authorization: token },
     });
-    return res.data.stateId;
+    return res.data.roomId;
+  }
+
+  public async getServerUrlForRoomId(roomId: string, tls: boolean = true): Promise<string> {
+    const res = await axios.get(`https://hathora-api.fly.dev/v2/rooms/${this.appId}/connectioninfo/${roomId}`);
+    return `${tls ? "wss" : "ws"}://${res.data.host}:${res.data.port}`;
   }
 
   public async connect(
-    serverUrl: string,
     token: string,
     roomId: string,
+    serverUrl: string,
     onMessage: (data: ArrayBuffer) => void,
     onClose: (e: { code: number; reason: string }) => void,
     transportType: TransportType = TransportType.WebSocket

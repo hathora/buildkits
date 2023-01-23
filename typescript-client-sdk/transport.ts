@@ -25,12 +25,12 @@ export class WebSocketHathoraTransport implements HathoraTransport {
   constructor(private serverUrl: string) {}
 
   public connect(
-    stateId: string,
+    roomId: string,
     token: string,
     onData: (data: ArrayBuffer) => void,
     onClose: (e: { code: number; reason: string }) => void
   ): Promise<void> {
-    this.socket = new WebSocket(`ws://${this.serverUrl}/${stateId}?token=${token}`);
+    this.socket = new WebSocket(`${this.serverUrl}/${roomId}?token=${token}`);
     this.socket.binaryType = "arraybuffer";
     return new Promise((resolve, reject) => {
       this.socket.onclose = (e) => {
