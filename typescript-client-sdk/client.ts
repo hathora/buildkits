@@ -2,12 +2,18 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { HathoraTransport, TransportType, WebSocketHathoraTransport } from "./transport.js";
 
+export type ConnectionInfo = {
+  host: string;
+  port: number;
+  tls: boolean;
+};
+
 export class HathoraClient {
   public static getUserFromToken(token: string): object & { id: string } {
     return jwtDecode(token);
   }
 
-  public constructor(private appId: string) {}
+  public constructor(private appId: string, private defaultConnectionInfo: ConnectionInfo) {}
 
   public async loginAnonymous(): Promise<string> {
     const res = await axios.post(`https://hathora-api.fly.dev/v2/auth/${this.appId}/login/anonymous`);
@@ -24,34 +30,42 @@ export class HathoraClient {
     return res.data.token;
   }
 
-  public async create(token: string): Promise<string> {
-    const res = await axios.post(`https://hathora-api.fly.dev/v2/lobby/${this.appId}/create/unlisted`, {}, {
-      headers: { Authorization: token },
-    });
-    return res.data.roomId;
+  public async createUnlistedLobby(token: string): Promise<string> {
+    const res = await axios.post(
+      `https://hathora-api.fly.dev/v2/lobby/${this.appId}/create/unlisted`,
+      {},
+      { headers: { Authorization: token } }
+    );
+    return res.data;
   }
 
-  public async getServerUrlForRoomId(roomId: string, tls: boolean = true): Promise<string> {
+  public async getConnectionInfoForRoomId(roomId: string, tls: boolean = true): Promise<ConnectionInfo> {
     const res = await axios.get(`https://hathora-api.fly.dev/v2/rooms/${this.appId}/connectioninfo/${roomId}`);
-    return `${tls ? "wss" : "ws"}://${res.data.host}:${res.data.port}`;
+    if (res.data.host === "") {
+      return this.defaultConnectionInfo;
+    }
+    return { host: res.data.host, port: res.data.port, tls };
   }
 
   public async connect(
     token: string,
     roomId: string,
-    serverUrl: string,
+    connectionInfo: ConnectionInfo,
     onMessage: (data: ArrayBuffer) => void,
     onClose: (e: { code: number; reason: string }) => void,
     transportType: TransportType = TransportType.WebSocket
   ): Promise<HathoraTransport> {
-    const connection = this.getConnectionForTransportType(serverUrl, transportType);
+    const connection = this.getConnectionForTransportType(connectionInfo, transportType);
     await connection.connect(roomId, token, onMessage, onClose);
     return connection;
   }
 
-  private getConnectionForTransportType(serverUrl: string, transportType: TransportType): HathoraTransport {
+  private getConnectionForTransportType(
+    connectionInfo: ConnectionInfo,
+    transportType: TransportType
+  ): HathoraTransport {
     if (transportType === TransportType.WebSocket) {
-      return new WebSocketHathoraTransport(serverUrl);
+      return new WebSocketHathoraTransport(connectionInfo);
     }
     throw new Error("Unsupported transport type: " + transportType);
   }

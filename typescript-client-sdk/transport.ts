@@ -1,4 +1,5 @@
 import WebSocket from "isomorphic-ws";
+import { ConnectionInfo } from "./client";
 
 export enum TransportType {
   WebSocket,
@@ -22,7 +23,7 @@ export interface HathoraTransport {
 export class WebSocketHathoraTransport implements HathoraTransport {
   private socket!: WebSocket;
 
-  constructor(private serverUrl: string) {}
+  constructor(private connectionInfo: ConnectionInfo) {}
 
   public connect(
     roomId: string,
@@ -30,7 +31,8 @@ export class WebSocketHathoraTransport implements HathoraTransport {
     onData: (data: ArrayBuffer) => void,
     onClose: (e: { code: number; reason: string }) => void
   ): Promise<void> {
-    this.socket = new WebSocket(`${this.serverUrl}/${roomId}?token=${token}`);
+    const { host, port, tls } = this.connectionInfo;
+    this.socket = new WebSocket(`${tls ? "wss" : "ws"}://${host}:${port}/${roomId}?token=${token}`);
     this.socket.binaryType = "arraybuffer";
     return new Promise((resolve, reject) => {
       this.socket.onclose = (e) => {

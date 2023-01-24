@@ -2,8 +2,8 @@
   "name": "@hathora/server-sdk",
   "version": "0.5.1",
   "type": "module",
-  "main": "lib/protocol.js",
-  "types": "lib/protocol.d.ts",
+  "main": "lib/server.js",
+  "types": "lib/server.d.ts",
   "scripts": {
     "build": "tsc"
   },

@@ -5,7 +5,7 @@ export type RoomId = string;
 export type UserId = string;
 
 export interface Application {
-  verifyToken(token: string): UserId | undefined;
+  getUserIdFromToken(token: string): UserId | undefined;
   subscribeUser(roomId: RoomId, userId: UserId): void;
   unsubscribeUser(roomId: RoomId, userId: UserId): void;
   onMessage(roomId: RoomId, userId: UserId, data: ArrayBuffer): void;
@@ -36,7 +36,8 @@ export function startServer(app: Application, port: number): Promise<Server> {
             res.writeStatus("401").end();
             return;
           }
-          const userId = app.verifyToken(queryParts[1]);
+          const token = queryParts[1];
+          const userId = app.getUserIdFromToken(token);
           if (userId === undefined) {
             res.writeStatus("401").end();
             return;
