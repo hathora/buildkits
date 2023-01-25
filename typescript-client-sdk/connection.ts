@@ -1,3 +1,5 @@
+import WebSocket from "isomorphic-ws";
+
 export type ConnectionInfo = {
   host: string;
   port: number;
