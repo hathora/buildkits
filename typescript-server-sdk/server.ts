@@ -6,15 +6,15 @@ export type RoomId = string;
 export type UserId = string;
 
 export interface Application {
-  getUserIdFromToken(token: string): UserId | undefined;
+  verifyToken(token: string, roomId: RoomId): UserId | undefined;
   subscribeUser(roomId: RoomId, userId: UserId): void;
   unsubscribeUser(roomId: RoomId, userId: UserId): void;
   onMessage(roomId: RoomId, userId: UserId, data: ArrayBuffer): void;
 }
 
 export interface Server {
-  sendMessage(roomId: RoomId, userId: UserId, data: ArrayBuffer): void;
   broadcastMessage(roomId: RoomId, data: ArrayBuffer): void;
+  sendMessage(roomId: RoomId, userId: UserId, data: ArrayBuffer): void;
   closeConnection(roomId: RoomId, userId: UserId, error: string): void;
 }
 
@@ -38,7 +38,7 @@ export function startServer(app: Application, port: number): Promise<Server> {
             return;
           }
           const token = queryParts[1];
-          const userId = app.getUserIdFromToken(token);
+          const userId = app.verifyToken(token, roomId);
           if (userId === undefined) {
             res.writeStatus("401").end();
             return;
@@ -91,13 +91,11 @@ export function startServer(app: Application, port: number): Promise<Server> {
   });
 }
 
-export function extractUserIdFromJwt(token: string, secret: string, userIdField: string = "id"): UserId | undefined {
+export function verifyJwt(token: string, secret: string, userIdField: string = "id"): UserId | undefined {
   try {
     const payload = jwt.verify(token, secret);
     if (typeof payload === "object" && typeof payload.id === "string") {
       return payload[userIdField];
     }
-  } catch (e) {
-    console.log("Invalid token", token);
-  }
+  } catch (e) {}
 }
