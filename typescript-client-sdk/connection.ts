@@ -24,12 +24,12 @@ export class HathoraConnection {
     this.socket = new WebSocket(`${tls ? "wss" : "ws"}://${host}:${port}/${this.roomId}?token=${token}`);
     this.socket.binaryType = "arraybuffer";
     return new Promise((resolve, reject) => {
+      this.socket.onopen = () => {
+        resolve();
+      };
       this.socket.onclose = (e) => {
         reject(e.reason);
         this._onClose(e);
-      };
-      this.socket.onopen = () => {
-        resolve();
       };
       this.socket.onmessage = ({ data }) => {
         if (!(data instanceof ArrayBuffer)) {

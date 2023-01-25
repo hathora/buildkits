@@ -1,4 +1,5 @@
 import uWS from "uWebSockets.js";
+import jwt from "jsonwebtoken";
 
 export type RoomId = string;
 
@@ -72,7 +73,6 @@ export function startServer(app: Application, port: number): Promise<Server> {
       })
       .listen(port, (listenSocket) => {
         if (listenSocket) {
-          console.log(`Listening on port ${port}`);
           resolve({
             sendMessage: (roomId: RoomId, userId: UserId, data: ArrayBuffer) => {
               socketsMap.get(roomId + userId)!.send(data, true);
@@ -89,4 +89,15 @@ export function startServer(app: Application, port: number): Promise<Server> {
         }
       });
   });
+}
+
+export function extractUserIdFromJwt(token: string, secret: string, userIdField: string = "id"): UserId | undefined {
+  try {
+    const payload = jwt.verify(token, secret);
+    if (typeof payload === "object" && typeof payload.id === "string") {
+      return payload[userIdField];
+    }
+  } catch (e) {
+    console.log("Invalid token", token);
+  }
 }
