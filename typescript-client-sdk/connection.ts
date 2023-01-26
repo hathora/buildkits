@@ -10,11 +10,25 @@ export class HathoraConnection {
   private socket!: WebSocket;
   private messageListeners: ((data: ArrayBuffer) => void)[] = [];
   private closeListeners: ((e: { code: number; reason: string }) => void)[] = [];
+  private stringEncoder = new TextEncoder();
+  private stringDecoder = new TextDecoder();
 
   public constructor(private roomId: string, private connectionInfo: ConnectionInfo) {}
 
   public onMessage(listener: (data: ArrayBuffer) => void) {
     this.messageListeners.push(listener);
+  }
+
+  public onMessageString(listener: (data: string) => void) {
+    this.messageListeners.push((buf) => {
+      listener(this.stringDecoder.decode(buf));
+    });
+  }
+
+  public onMessageJson<T = object>(listener: (data: T) => void) {
+    this.onMessageString((str) => {
+      listener(JSON.parse(str));
+    });
   }
 
   public onClose(listener: (e: { code: number; reason: string }) => void) {
@@ -44,6 +58,14 @@ export class HathoraConnection {
 
   public write(data: ArrayBuffer) {
     this.socket?.send(data);
+  }
+
+  public writeString(data: string) {
+    this.write(this.stringEncoder.encode(data));
+  }
+
+  public writeJson<T = object>(data: T) {
+    this.writeString(JSON.stringify(data));
   }
 
   public disconnect(code?: number | undefined): void {
