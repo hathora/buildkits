@@ -2,8 +2,8 @@
   "name": "@hathora/client-sdk",
   "version": "1.0.0-beta3",
   "type": "module",
-  "main": "lib/client.js",
-  "types": "lib/client.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc"
   },

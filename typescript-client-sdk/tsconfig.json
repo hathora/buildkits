@@ -8,5 +8,5 @@
     "outDir": "./lib",
     "strict": true
   },
-  "include": ["client.ts", "transport.ts"]
+  "include": ["index.ts", "client.ts", "transport.ts"]
 }
