@@ -85,7 +85,7 @@ export function startServer(app: Application, port: number): Promise<Server> {
             },
           });
         } else {
-          reject("Server failed to start");
+          reject(`Server failed to start, is the port ${port} already in use?`);
         }
       });
   });
