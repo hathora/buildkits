@@ -24,7 +24,7 @@ export class HathoraClient {
     return res.data.token;
   }
 
-  public async createUnlistedLobby(token: string): Promise<string> {
+  public async createPrivateLobby(token: string): Promise<string> {
     const res = await axios.post(
       `https://hathora-api.fly.dev/v2/lobby/${this.appId}/create/unlisted`,
       {},
