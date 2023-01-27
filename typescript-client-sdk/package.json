@@ -26,7 +26,6 @@
     "networking"
   ],
   "dependencies": {
-    "axios": "^0.27.2",
     "isomorphic-ws": "^5.0.0",
     "jwt-decode": "^3.1.2"
   },
