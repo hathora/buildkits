@@ -25,7 +25,7 @@ export class HathoraConnection {
     });
   }
 
-  public onMessageJson<T = object>(listener: (data: T) => void) {
+  public onMessageJson<T = any>(listener: (data: T) => void) {
     this.onMessageString((str) => {
       listener(JSON.parse(str));
     });
@@ -64,7 +64,7 @@ export class HathoraConnection {
     this.write(this.stringEncoder.encode(data));
   }
 
-  public writeJson<T = object>(data: T) {
+  public writeJson<T = any>(data: T) {
     this.writeString(JSON.stringify(data));
   }
 
