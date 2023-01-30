@@ -1,6 +1,6 @@
 {
   "name": "@hathora/client-sdk",
-  "version": "1.0.0-beta9",
+  "version": "1.0.0-beta10",
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
