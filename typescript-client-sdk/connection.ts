@@ -3,7 +3,7 @@ import WebSocket from "isomorphic-ws";
 export type ConnectionInfo = {
   host: string;
   port: number;
-  tls: boolean;
+  transportType: "tcp" | "tls" | "udp";
 };
 
 export class HathoraConnection {
@@ -36,8 +36,10 @@ export class HathoraConnection {
   }
 
   public async connect(token: string): Promise<void> {
-    const { host, port, tls } = this.connectionInfo;
-    this.socket = new WebSocket(`${tls ? "wss" : "ws"}://${host}:${port}/${this.roomId}?token=${token}`);
+    const { host, port, transportType } = this.connectionInfo;
+    this.socket = new WebSocket(
+      `${transportType === "tls" ? "wss" : "ws"}://${host}:${port}/${this.roomId}?token=${token}`
+    );
     this.socket.binaryType = "arraybuffer";
     return new Promise((resolve, reject) => {
       this.socket.onopen = () => {
