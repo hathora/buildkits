@@ -33,7 +33,7 @@ export class HathoraClient {
     );
   }
 
-  public async getConnectionInfoForRoomId(roomId: string, tls: boolean = true): Promise<ConnectionInfo> {
+  public async getConnectionInfoForRoomId(roomId: string): Promise<ConnectionInfo> {
     if (this.localConnectionInfo !== undefined) {
       return this.localConnectionInfo;
     }
@@ -41,8 +41,8 @@ export class HathoraClient {
     return await res.json();
   }
 
-  public async newConnection(roomId: string, tls: boolean = true): Promise<HathoraConnection> {
-    const connectionInfo = await this.getConnectionInfoForRoomId(roomId, tls);
+  public async newConnection(roomId: string): Promise<HathoraConnection> {
+    const connectionInfo = await this.getConnectionInfoForRoomId(roomId);
     return new HathoraConnection(roomId, connectionInfo);
   }
 
