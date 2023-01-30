@@ -6,7 +6,7 @@ export class HathoraClient {
     return jwtDecode(token);
   }
 
-  public constructor(private appId: string, private defaultConnectionInfo: ConnectionInfo) {}
+  public constructor(private appId: string, private localConnectionInfo?: ConnectionInfo) {}
 
   public async loginAnonymous(): Promise<string> {
     const res = await this.postJson(`https://hathora-api.fly.dev/v2/auth/${this.appId}/login/anonymous`, {});
@@ -25,19 +25,20 @@ export class HathoraClient {
 
   public async createPrivateLobby(token: string): Promise<string> {
     return await this.postJson(
-      `https://hathora-api.fly.dev/v2/lobby/${this.appId}/create/unlisted`,
+      `https://hathora-api.fly.dev/v2/lobby/${this.appId}/create/unlisted?local=${
+        this.localConnectionInfo === undefined ? "false" : "true"
+      }`,
       {},
       { Authorization: token }
     );
   }
 
   public async getConnectionInfoForRoomId(roomId: string, tls: boolean = true): Promise<ConnectionInfo> {
-    const res = await fetch(`https://hathora-api.fly.dev/v2/rooms/${this.appId}/connectioninfo/${roomId}`);
-    const data = await res.json();
-    if (data.host === "") {
-      return this.defaultConnectionInfo;
+    if (this.localConnectionInfo !== undefined) {
+      return this.localConnectionInfo;
     }
-    return { host: data.host, port: data.port, tls };
+    const res = await fetch(`https://hathora-api.fly.dev/v2/rooms/${this.appId}/connectioninfo/${roomId}`);
+    return await res.json();
   }
 
   public async newConnection(roomId: string, tls: boolean = true): Promise<HathoraConnection> {
