@@ -75,13 +75,13 @@ export function startServer(app: Application, port: number): Promise<Server> {
         if (listenSocket) {
           resolve({
             sendMessage: (roomId: RoomId, userId: UserId, data: ArrayBuffer) => {
-              socketsMap.get(roomId + userId)!.send(data, true);
+              socketsMap.get(roomId + userId)?.send(data, true);
             },
             broadcastMessage: (roomId: RoomId, data: ArrayBuffer) => {
               server.publish(roomId, data, true);
             },
             closeConnection: (roomId: RoomId, userId: UserId, error: string) => {
-              socketsMap.get(roomId + userId)!.end(4000, error);
+              socketsMap.get(roomId + userId)?.end(4000, error);
             },
           });
         } else {
