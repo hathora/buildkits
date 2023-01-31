@@ -1,6 +1,6 @@
 {
   "name": "@hathora/server-sdk",
-  "version": "1.0.0-beta2",
+  "version": "1.0.0-beta3",
   "type": "module",
   "main": "lib/server.js",
   "types": "lib/server.d.ts",
