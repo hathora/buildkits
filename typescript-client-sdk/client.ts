@@ -33,6 +33,27 @@ export class HathoraClient {
     );
   }
 
+  public async createPublicLobby(token: string): Promise<string> {
+    return await this.postJson(
+      `https://hathora-api.fly.dev/v2/lobby/${this.appId}/create/public?local=${
+        this.localConnectionInfo === undefined ? "false" : "true"
+      }`,
+      {},
+      { Authorization: token }
+    );
+  }
+
+  public async getPublicLobbies(token: string, region?: string): Promise<{ roomId: string }[]> {
+    const regionParam = region === undefined ? "" : `region=${region}&`;
+    return await this.postJson(
+      `https://hathora-api.fly.dev/v2/lobby/${this.appId}/list?${regionParam}local=${
+        this.localConnectionInfo === undefined ? "false" : "true"
+      }`,
+      {},
+      { Authorization: token }
+    );
+  }
+
   public async getConnectionInfoForRoomId(roomId: string): Promise<ConnectionInfo> {
     if (this.localConnectionInfo !== undefined) {
       return this.localConnectionInfo;
