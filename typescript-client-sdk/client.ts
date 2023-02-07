@@ -45,13 +45,13 @@ export class HathoraClient {
 
   public async getPublicLobbies(token: string, region?: string): Promise<{ roomId: string }[]> {
     const regionParam = region === undefined ? "" : `region=${region}&`;
-    return await this.postJson(
+    const res = await fetch(
       `https://hathora-api.fly.dev/v2/lobby/${this.appId}/list?${regionParam}local=${
         this.localConnectionInfo === undefined ? "false" : "true"
       }`,
-      {},
-      { Authorization: token }
+      { headers: { Authorization: token } }
     );
+    return await res.json();
   }
 
   public async getConnectionInfoForRoomId(roomId: string): Promise<ConnectionInfo> {
