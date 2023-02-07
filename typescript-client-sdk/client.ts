@@ -1,6 +1,13 @@
 import jwtDecode from "jwt-decode";
 import { ConnectionInfo, HathoraConnection } from "./connection";
 
+export type LobbyInfo = {
+  roomId: string;
+  region: string;
+  createdBy: string;
+  createdAt: Date;
+};
+
 export class HathoraClient {
   public static getUserFromToken(token: string): object & { id: string } {
     return jwtDecode(token);
@@ -43,7 +50,7 @@ export class HathoraClient {
     );
   }
 
-  public async getPublicLobbies(token: string, region?: string): Promise<{ roomId: string }[]> {
+  public async getPublicLobbies(token: string, region?: string): Promise<LobbyInfo[]> {
     const regionParam = region === undefined ? "" : `region=${region}&`;
     const res = await fetch(
       `https://hathora-api.fly.dev/v2/lobby/${this.appId}/list?${regionParam}local=${
