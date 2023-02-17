@@ -16,23 +16,23 @@ export class HathoraClient {
   public constructor(private appId: string, private localConnectionInfo?: ConnectionInfo) {}
 
   public async loginAnonymous(): Promise<string> {
-    const res = await this.postJson(`https://hathora-api.fly.dev/v2/auth/${this.appId}/login/anonymous`, {});
+    const res = await this.postJson(`https://api.hathora.dev/v2/auth/${this.appId}/login/anonymous`, {});
     return res.token;
   }
 
   public async loginNickname(nickname: string): Promise<string> {
-    const res = await this.postJson(`https://hathora-api.fly.dev/v2/auth/${this.appId}/login/nickname`, { nickname });
+    const res = await this.postJson(`https://api.hathora.dev/v2/auth/${this.appId}/login/nickname`, { nickname });
     return res.token;
   }
 
   public async loginGoogle(idToken: string): Promise<string> {
-    const res = await this.postJson(`https://hathora-api.fly.dev/v2/auth/${this.appId}/login/google`, { idToken });
+    const res = await this.postJson(`https://api.hathora.dev/v2/auth/${this.appId}/login/google`, { idToken });
     return res.token;
   }
 
   public async createPrivateLobby(token: string): Promise<string> {
     return await this.postJson(
-      `https://hathora-api.fly.dev/v2/lobby/${this.appId}/create/unlisted?local=${
+      `https://api.hathora.dev/v2/lobby/${this.appId}/create/unlisted?local=${
         this.localConnectionInfo === undefined ? "false" : "true"
       }`,
       {},
@@ -42,7 +42,7 @@ export class HathoraClient {
 
   public async createPublicLobby(token: string): Promise<string> {
     return await this.postJson(
-      `https://hathora-api.fly.dev/v2/lobby/${this.appId}/create/public?local=${
+      `https://api.hathora.dev/v2/lobby/${this.appId}/create/public?local=${
         this.localConnectionInfo === undefined ? "false" : "true"
       }`,
       {},
@@ -53,7 +53,7 @@ export class HathoraClient {
   public async getPublicLobbies(token: string, region?: string): Promise<LobbyInfo[]> {
     const regionParam = region === undefined ? "" : `region=${region}&`;
     const res = await fetch(
-      `https://hathora-api.fly.dev/v2/lobby/${this.appId}/list?${regionParam}local=${
+      `https://api.hathora.dev/v2/lobby/${this.appId}/list?${regionParam}local=${
         this.localConnectionInfo === undefined ? "false" : "true"
       }`,
       { headers: { Authorization: token } }
@@ -65,7 +65,7 @@ export class HathoraClient {
     if (this.localConnectionInfo !== undefined) {
       return this.localConnectionInfo;
     }
-    const res = await fetch(`https://hathora-api.fly.dev/v2/rooms/${this.appId}/connectioninfo/${roomId}`);
+    const res = await fetch(`https://api.hathora.dev/v2/rooms/${this.appId}/connectioninfo/${roomId}`);
     return await res.json();
   }
 
