@@ -22,7 +22,7 @@ You will be greeted with a project list screen, if you have already created an a
 
 ![A screenshot of the Hathora console's project list](https://user-images.githubusercontent.com/7004280/223693106-b7660e2c-20bd-478d-9c68-a23440568526.png)
 
-If you have not yet created an app, click the ![Create Application](https://user-images.githubusercontent.com/7004280/223693408-6dc39d4e-f06c-476a-b082-7592c70ff578.png) button. You will then be faced with the following screen...
+If you have not yet created an app, click the `Create Application` button. You will then be faced with the following screen...
 
 ![A screenshot of the Hathora console's Create Application screen](https://user-images.githubusercontent.com/7004280/223693567-9c24509f-c608-4525-be3d-4254c8e1b6d8.png)
 
