@@ -6,6 +6,11 @@
 
 The Hathora TypeScript Client SDK is used to connect your game or application to your Hathora server, and send / receive messages between the two.
 
+- [Installation](#installation)
+- [Getting an APP_ID and APP_SECRET](#getting-an-app_id-and-app_secret)
+- [Establishing a connection](#establishing-a-connection)
+- [Using the connection](#using-the-connection)
+
 ## Installation
 
 Run the following from your client app's directory to install the SDK as an NPM dependency:
