@@ -6,11 +6,11 @@
 
 The Hathora TypeScript Server SDK provides a set of tools for handling connected users to your game server, and interfacing with their cooresponding clients.
 
-- Installation
-- Getting an APP_ID and APP_SECRET
-- Defining Rooms
-- Defining the Store
-- Boot the Server
+- [Installation](#installation)
+- [Getting an APP_ID and APP_SECRET](#getting-an-app_id-and-app_secret)
+- [Defining Rooms](#defining-rooms)
+- [Defining the Store](#defining-the-store)
+- [Boot the Server](#boot-the-server)
 
 ## Installation
 
