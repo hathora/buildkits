@@ -38,7 +38,7 @@ export class HathoraClient {
 
   public async createPrivateLobby(token: string): Promise<string> {
     return await this.postJson(
-      `https://api.hathora.dev/lobby/v1/${this.appId}/create/unlisted?local=${
+      `https://api.hathora.dev/lobby/v1/${this.appId}/create/private?local=${
         this.localConnectionDetails === undefined ? "false" : "true"
       }`,
       {},
