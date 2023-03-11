@@ -1,6 +1,6 @@
 import WebSocket from "isomorphic-ws";
 
-export type ConnectionInfo = {
+export type ConnectionDetails = {
   host: string;
   port: number;
   transportType: "tcp" | "tls" | "udp";
@@ -13,7 +13,7 @@ export class HathoraConnection {
   private stringEncoder = new TextEncoder();
   private stringDecoder = new TextDecoder();
 
-  public constructor(private roomId: string, private connectionInfo: ConnectionInfo) {}
+  public constructor(private roomId: string, private connectionInfo: ConnectionDetails) {}
 
   public onMessage(listener: (data: ArrayBuffer) => void) {
     this.messageListeners.push(listener);
