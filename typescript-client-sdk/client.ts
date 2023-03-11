@@ -22,12 +22,12 @@ export class HathoraClient {
   public constructor(private appId: string, private localConnectionDetails?: ConnectionDetails) {}
 
   public async loginAnonymous(): Promise<string> {
-    const res = await this.postJson(`https://api.hathora.dev/v2/auth/${this.appId}/login/anonymous`, {});
+    const res = await this.postJson(`https://api.hathora.dev/auth/v1/${this.appId}/login/anonymous`, {});
     return res.token;
   }
 
   public async loginNickname(nickname: string): Promise<string> {
-    const res = await this.postJson(`https://api.hathora.dev/v2/auth/${this.appId}/login/nickname`, { nickname });
+    const res = await this.postJson(`https://api.hathora.dev/auth/v1/${this.appId}/login/nickname`, { nickname });
     return res.token;
   }
 
