@@ -1,9 +1,9 @@
 {
   "name": "@hathora/client-sdk",
-  "version": "0.0.7",
+  "version": "1.0.0-beta17",
   "type": "module",
-  "main": "lib/client.js",
-  "types": "lib/client.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc"
   },
@@ -26,11 +26,8 @@
     "networking"
   ],
   "dependencies": {
-    "axios": "^0.27.2",
-    "bin-serde": "^1.1.1",
     "isomorphic-ws": "^5.0.0",
-    "jwt-decode": "^3.1.2",
-    "net": "^1.0.2"
+    "jwt-decode": "^3.1.2"
   },
   "devDependencies": {
     "@types/node": "^18.0.3",

@@ -8,5 +8,5 @@
     "outDir": "./lib",
     "strict": true
   },
-  "include": ["protocol.ts"]
+  "include": ["server.ts"]
 }

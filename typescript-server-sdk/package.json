@@ -1,9 +1,9 @@
 {
   "name": "@hathora/server-sdk",
-  "version": "0.5.1",
+  "version": "1.0.0-beta3",
   "type": "module",
-  "main": "lib/protocol.js",
-  "types": "lib/protocol.d.ts",
+  "main": "lib/server.js",
+  "types": "lib/server.d.ts",
   "scripts": {
     "build": "tsc"
   },
@@ -26,12 +26,12 @@
     "networking"
   ],
   "dependencies": {
-    "bin-serde": "^1.2.0",
-    "uuid": "^8.3.2"
+    "jsonwebtoken": "^9.0.0",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.19.0"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.0.3",
-    "@types/uuid": "^8.3.4",
     "typescript": "^4.7.4"
   }
 }
