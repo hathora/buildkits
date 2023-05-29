@@ -39,42 +39,44 @@ After entering a valid name and creating your application, it's App ID and App S
 import { HathoraClient } from "@hathora/client-sdk";
 
 async function establishConnection() {
-  return new Promise((resolve) => {
-    // Instantiate an object which represents our local connection info...
-    const connectionInfo = { host: "localhost", port: 4000, transportType: "tcp" as const };
+  // Instantiate an object which represents our local connection info...
+  const connectionInfo = {
+    host: "localhost",
+    port: 4000,
+    transportType: "tcp" as const,
+  };
 
-    // Or pass undefined if working in a production Hathora environment
-    // const connectionInfo = undefined;
-  
-    // Instantiate our client object (this is where you provide a valid Hathora APP_ID, which here is being passed via an environment variable)
-    const client = new HathoraClient("YOUR_HATHORA_APP_ID", connectionInfo);
-  
-    // Use the client to get a token for the user
-    const token = await client.loginAnonymous();
-  
-    // You can now create a new public room
-    const newPublicRoomId = await client.createPublicLobby(token);
-  
-    // Or a new private room
-    const newPrivateRoomId = await client.createPrivateLobby(token);
-  
-    // And query for existing public rooms
-    const existingPublicRoomIds = await client.getPublicLobbies(token);
-  
-    // Create a HathoraConnection instance
-    const connection = client.newConnection(newPublicRoomId);
+  // Or pass undefined if working in a production Hathora environment
+  // const connectionInfo = undefined;
 
-    // Handle connection closing how you like
-    connection.onClose((error) => {
-      console.error("Connection closed", error);
-    });
+  // Instantiate our client object (this is where you provide a valid Hathora APP_ID, which here is being passed via an environment variable)
+  const client = new HathoraClient("YOUR_HATHORA_APP_ID", connectionInfo);
 
-    // Initiate the connection
-    connection.connect(token);
+  // Use the client to get a token for the user
+  const token = await client.loginAnonymous();
 
-    // And resolve our promise, passing our connection to be used later...
-    resolve(connection);
+  // You can now create a new public room
+  const newPublicRoomId = await client.createPublicLobby(token);
+
+  // Or a new private room
+  const newPrivateRoomId = await client.createPrivateLobby(token);
+
+  // And query for existing public rooms
+  const existingPublicRoomIds = await client.getPublicLobbies(token);
+
+  // Create a HathoraConnection instance
+  const connection = client.newConnection(newPublicRoomId);
+
+  // Handle connection closing how you like
+  connection.onClose((error) => {
+    console.error("Connection closed", error);
   });
+
+  // Initiate the connection
+  connection.connect(token);
+
+  // Return our connection to be used later...
+  return connection;
 }
 ```
 
