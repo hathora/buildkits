@@ -9,7 +9,7 @@ export interface Application {
   verifyToken(token: string, roomId: RoomId): UserId | undefined;
   subscribeUser(roomId: RoomId, userId: UserId): void;
   unsubscribeUser(roomId: RoomId, userId: UserId): void;
-  onMessage(roomId: RoomId, userId: UserId, data: ArrayBuffer): void;
+  onMessage(roomId: RoomId, userId: UserId, data: ArrayBuffer): Promise<void>;
 }
 
 export interface Server {

@@ -112,7 +112,7 @@ const store: Application = {
   },
 
   // Called when a message is sent to the server for handling, much of your core logic will live here
-  onMessage(roomId: RoomId, userId: string, data: ArrayBuffer): void {
+  async onMessage(roomId: RoomId, userId: string, data: ArrayBuffer): Promise<void> {
     // Make sure the room exists
     if (!rooms.has(roomId)) {
       return;
