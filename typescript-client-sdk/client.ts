@@ -19,7 +19,7 @@ export class HathoraClient {
     return jwtDecode(token);
   }
 
-  public constructor(private appId: string, private localConnectionDetails?: ConnectionDetails) {}
+  public constructor(public appId: string, private localConnectionDetails?: ConnectionDetails) {}
 
   public async loginAnonymous(): Promise<string> {
     const res = await this.postJson(`https://api.hathora.dev/auth/v1/${this.appId}/login/anonymous`, {});
