@@ -6,9 +6,9 @@ export type RoomId = string;
 export type UserId = string;
 
 export interface Application {
-  verifyToken(token: string, roomId: RoomId): UserId | undefined;
-  subscribeUser(roomId: RoomId, userId: UserId): void;
-  unsubscribeUser(roomId: RoomId, userId: UserId): void;
+  verifyToken(token: string, roomId: RoomId): Promise<UserId | undefined>;
+  subscribeUser(roomId: RoomId, userId: UserId): Promise<void>;
+  unsubscribeUser(roomId: RoomId, userId: UserId): Promise<void>;
   onMessage(roomId: RoomId, userId: UserId, data: ArrayBuffer): Promise<void>;
 }
 
@@ -30,7 +30,7 @@ export function startServer(app: Application, port: number): Promise<Server> {
     const server = uWS
       .App()
       .ws<ConnectionData>("/:roomId", {
-        upgrade: (res, req, context) => {
+        upgrade: async (res, req, context) => {
           const roomId = req.getParameter(0);
           const queryParts = req.getQuery().split("token=");
           if (queryParts.length !== 2) {
@@ -38,7 +38,7 @@ export function startServer(app: Application, port: number): Promise<Server> {
             return;
           }
           const token = queryParts[1];
-          const userId = app.verifyToken(token, roomId);
+          const userId = await app.verifyToken(token, roomId);
           if (userId === undefined) {
             res.writeStatus("401").end();
             return;
