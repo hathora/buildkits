@@ -36,32 +36,29 @@ export class HathoraClient {
     return res.token;
   }
 
-  public async createPrivateLobby(token: string): Promise<string> {
-    return await this.postJson(
-      `https://api.hathora.dev/lobby/v1/${this.appId}/create/private?local=${
-        this.localConnectionDetails === undefined ? "false" : "true"
-      }`,
-      {},
+  public async createPrivateLobby(token: string, { region = 'Washington_DC', initialConfig = '{}' } = {}): Promise<string> {
+    const visibility = this.localConnectionDetails !== undefined ? 'local' : 'private'
+    const { roomId } = await this.postJson(
+      `https://api.hathora.dev/lobby/v2/${this.appId}/create`,
+      { visibility, region, initialConfig },
       { Authorization: token }
     );
+    return roomId
   }
 
-  public async createPublicLobby(token: string): Promise<string> {
-    return await this.postJson(
-      `https://api.hathora.dev/lobby/v1/${this.appId}/create/public?local=${
-        this.localConnectionDetails === undefined ? "false" : "true"
-      }`,
-      {},
+  public async createPublicLobby(token: string, { region = 'Washington_DC', initialConfig = '{}' } = {}): Promise<string> {
+    const visibility = this.localConnectionDetails !== undefined ? 'local' : 'public'
+    const { roomId } = await this.postJson(
+      `https://api.hathora.dev/lobby/v2/${this.appId}/create`,
+      { visibility, region, initialConfig },
       { Authorization: token }
     );
+    return roomId
   }
 
-  public async getPublicLobbies(token: string, region?: string): Promise<LobbyInfo[]> {
-    const regionParam = region === undefined ? "" : `region=${region}&`;
+  public async getPublicLobbies(token: string, region = 'Washington_DC'): Promise<LobbyInfo[]> {
     const res = await fetch(
-      `https://api.hathora.dev/lobby/v1/${this.appId}/list?${regionParam}local=${
-        this.localConnectionDetails === undefined ? "false" : "true"
-      }`,
+      `https://api.hathora.dev/lobby/v2/${this.appId}/list/public?region=${region}`,
       { headers: { Authorization: token } }
     );
     return await res.json();
