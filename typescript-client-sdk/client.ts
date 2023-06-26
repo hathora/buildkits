@@ -36,27 +36,27 @@ export class HathoraClient {
     return res.token;
   }
 
-  public async createPrivateLobby(token: string, { region = 'Washington_DC', initialConfig = '{}' } = {}): Promise<string> {
-    const visibility = this.localConnectionDetails !== undefined ? 'local' : 'private'
+  public async createPrivateLobby(token: string, { region = "Washington_DC", initialConfig = "{}" } = {}): Promise<string> {
+    const visibility = this.localConnectionDetails !== undefined ? "local" : "private";
     const { roomId } = await this.postJson(
       `https://api.hathora.dev/lobby/v2/${this.appId}/create`,
       { visibility, region, initialConfig },
       { Authorization: token }
     );
-    return roomId
+    return roomId;
   }
 
-  public async createPublicLobby(token: string, { region = 'Washington_DC', initialConfig = '{}' } = {}): Promise<string> {
-    const visibility = this.localConnectionDetails !== undefined ? 'local' : 'public'
+  public async createPublicLobby(token: string, { region = "Washington_DC", initialConfig = "{}" } = {}): Promise<string> {
+    const visibility = this.localConnectionDetails !== undefined ? "local" : "public";
     const { roomId } = await this.postJson(
       `https://api.hathora.dev/lobby/v2/${this.appId}/create`,
       { visibility, region, initialConfig },
       { Authorization: token }
     );
-    return roomId
+    return roomId;
   }
 
-  public async getPublicLobbies(token: string, region = 'Washington_DC'): Promise<LobbyInfo[]> {
+  public async getPublicLobbies(token: string, region = ""): Promise<LobbyInfo[]> {
     const res = await fetch(
       `https://api.hathora.dev/lobby/v2/${this.appId}/list/public?region=${region}`,
       { headers: { Authorization: token } }
