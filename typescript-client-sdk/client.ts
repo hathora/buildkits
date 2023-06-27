@@ -57,7 +57,7 @@ export class HathoraClient {
   }
 
   public async getPublicLobbies(token: string, region?: string): Promise<LobbyInfo[]> {
-    const regionParam = region === undefined ? "" : `region=${region}`;
+    const regionParam = region === undefined ? "" : `?region=${region}`;
     const res = await fetch(
       `https://api.hathora.dev/lobby/v2/${this.appId}/list/public?${regionParam}`,
       { headers: { Authorization: token } }
