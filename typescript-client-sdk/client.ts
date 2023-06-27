@@ -58,10 +58,9 @@ export class HathoraClient {
 
   public async getPublicLobbies(token: string, region?: string): Promise<LobbyInfo[]> {
     const regionParam = region === undefined ? "" : `?region=${region}`;
-    const res = await fetch(
-      `https://api.hathora.dev/lobby/v2/${this.appId}/list/public${regionParam}`,
-      { headers: { Authorization: token } }
-    );
+    const res = await fetch(`https://api.hathora.dev/lobby/v2/${this.appId}/list/public${regionParam}`, {
+      headers: { Authorization: token }
+    });
     return await res.json();
   }
 
@@ -90,7 +89,7 @@ export class HathoraClient {
     const res = await fetch(url, {
       method: "POST",
       headers: { ...headers, "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify(body)
     });
     return await res.json();
   }

@@ -43,7 +43,7 @@ async function establishConnection() {
   const connectionInfo = {
     host: "localhost",
     port: 4000,
-    transportType: "tcp" as const,
+    transportType: "tcp" as const
   };
 
   // Or pass undefined if working in a production Hathora environment
@@ -91,8 +91,8 @@ async function example() {
 
   // Write JSON messages to the server
   connection.writeJson({
-    type: 'test-message',
-    value: 'Hello Hathora server!'
+    type: "test-message",
+    value: "Hello Hathora server!"
   });
 
   // Listen for JSON messages from the server

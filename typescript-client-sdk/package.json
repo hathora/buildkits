@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "prettier --write ."
   },
   "author": "Harsh Pandey",
   "license": "MIT",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@types/node": "^18.0.3",
     "@types/ws": "^8.5.3",
+    "prettier": "^2.8.8",
     "typescript": "^4.7.4"
   }
 }

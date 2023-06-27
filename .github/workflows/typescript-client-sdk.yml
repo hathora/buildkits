@@ -1,0 +1,28 @@
+name: Typescript Client
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    paths:
+      - typescript-client-sdk/**
+      - .github/workflows/typescript-client-sdk.yml
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: typescript-client-sdk
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('package-lock.json') }}
+      - run: npm install
+      - run: npx prettier --check .
