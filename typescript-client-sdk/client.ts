@@ -36,7 +36,10 @@ export class HathoraClient {
     return res.token;
   }
 
-  public async createPrivateLobby(token: string, { region = "Washington_DC", initialConfig = {} } = {}): Promise<string> {
+  public async createPrivateLobby(
+    token: string,
+    { region = "Washington_DC", initialConfig = {} } = {}
+  ): Promise<string> {
     const visibility = this.localConnectionDetails !== undefined ? "local" : "private";
     const { roomId } = await this.postJson(
       `https://api.hathora.dev/lobby/v2/${this.appId}/create`,
@@ -46,7 +49,10 @@ export class HathoraClient {
     return roomId;
   }
 
-  public async createPublicLobby(token: string, { region = "Washington_DC", initialConfig = {} } = {}): Promise<string> {
+  public async createPublicLobby(
+    token: string,
+    { region = "Washington_DC", initialConfig = {} } = {}
+  ): Promise<string> {
     const visibility = this.localConnectionDetails !== undefined ? "local" : "public";
     const { roomId } = await this.postJson(
       `https://api.hathora.dev/lobby/v2/${this.appId}/create`,
