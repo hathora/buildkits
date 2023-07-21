@@ -1,5 +1,5 @@
 import jwtDecode from "jwt-decode";
-import { ConnectionDetails, HathoraConnection } from "./connection";
+import { ConnectionDetails, HathoraConnection } from "./connection.js";
 
 export type LobbyInfo = {
   roomId: string;

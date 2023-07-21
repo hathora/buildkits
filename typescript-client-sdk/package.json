@@ -1,11 +1,11 @@
 {
   "name": "@hathora/client-sdk",
-  "version": "1.2.0",
+  "version": "1.3.1",
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf lib/* && tsc",
     "lint": "prettier --write ."
   },
   "author": "Harsh Pandey",
@@ -27,13 +27,13 @@
     "networking"
   ],
   "dependencies": {
-    "isomorphic-ws": "^5.0.0",
-    "jwt-decode": "^3.1.2"
+    "isomorphic-ws": "5.0.0",
+    "jwt-decode": "3.1.2"
   },
   "devDependencies": {
-    "@types/node": "^18.0.3",
-    "@types/ws": "^8.5.3",
-    "prettier": "^2.8.8",
-    "typescript": "^4.7.4"
+    "@types/node": "18.0.3",
+    "@types/ws": "8.5.3",
+    "prettier": "2.8.8",
+    "typescript": "4.7.4"
   }
 }
